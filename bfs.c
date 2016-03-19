@@ -38,7 +38,7 @@ int main()
 	que[tail].x = start;
 	que[tail].s = 0;
 	tail++;
-	book[1] = start; // 标记start号城市已在队列中
+	book[start] = 1; // 标记start号城市已在队列中
 
 	// 当队列不为空的时候循环
 	while (head < tail)
