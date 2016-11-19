@@ -42,7 +42,7 @@ void siftdown(int i) // 传入一个需要向下调整的节点编号i，这里�
 }
 
 // 建立堆的函数
-void creat()
+void create()
 {
 	int i;
 	// 从最后一个非叶结点到第1个结点依次进行向上调整
@@ -74,7 +74,7 @@ int main()
 	n = num;
 
 	// 建堆
-	creat();
+	create();
 
 	// 删除顶部元素，连续删除n次，其实也就是从大到小把数输出来
 	for (i = 1; i <= num; i++)

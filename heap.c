@@ -58,7 +58,7 @@ void siftup(int i) // 传入一个需要向上调整的结点编号i
 }
 
 // 建立堆的函数
-void creat()
+void create()
 {
 	int i;
 	// 从最后一个非叶结点到第1个结点依次进行向上调整
