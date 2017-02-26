@@ -23,9 +23,9 @@ ElementType Median3(ElementType A[], int left, int right)
     if (A[center] > A[right]) {
         swap(&A[center], &A[right]);
     }
-    swap(&A[center], &A[right]);
+    swap(&A[center], &A[right-1]);
 
-    return A[right];
+    return A[right-1];
 }
 
 #define cutoff (3)

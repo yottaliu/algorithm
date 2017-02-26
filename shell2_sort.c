@@ -1,5 +1,5 @@
 #include <stdio.h>
-void shell_sort2(int *a, int n)
+void shell_sort(int *a, int n)
 {
 	int i, j, t, gap = n / 2;
 	while (gap > 0)
@@ -23,7 +23,7 @@ int main(void)
 	for (i = 0; i < n; ++i)
 		scanf("%d", &a[i]);
 
-	shell_sort2(a, n);
+	shell_sort(a, n);
 
 	for (i = 0; i < n; ++i)
 		printf("%d ", a[i]);
