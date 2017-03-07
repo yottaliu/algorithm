@@ -1,7 +1,7 @@
 CC 				= gcc
 CFLAGS 			=
 
-TEST_SORT 		= $(shell bash sel.sh)
+TEST_SORT 		= $(shell bash choice.sh)
 ALL_SORT 		= $(shell find . -name "*_sort.c")
 
 .PHONY: all compare test clean
