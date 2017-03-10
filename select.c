@@ -54,15 +54,10 @@ void dfs(int step)
 
 int main(void)
 {
-    int i, j;
     scanf("%d%d", &m, &n);
-    for (i = 1; i <= select_n_from_m(n, m); ++i) {
-        for (j = 0; j < MAX; ++j) {
-            queue[j] = 0;
-        }
+    for (x = 1; x <= select_n_from_m(n, m); ++x) {
         queue[0] = 0;
         count = 0;
-        x = i;
         dfs(1);
     }
     return 0;
