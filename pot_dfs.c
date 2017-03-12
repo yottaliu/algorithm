@@ -74,13 +74,13 @@ void dfs(int curr)
         return;
     }
 
+    tmp = now;
     for (i = 0; i < X_SIZE+1; ++i) {
         for (j = 0; j < Y_SIZE+1; ++j) {
             appeared[i][j] = 0;
         }
     }
     for (i = 0; i < 6; ++i) {
-        tmp = now;
         operate(i);
         if (!appeared[now.x][now.y] && !visited[now.x][now.y]) {
             dfs(curr+1);
