@@ -28,16 +28,19 @@
 
 #include <stdio.h>
 #define N 17
-int main(void)
+
+void gen_factorial(long long int *fac)
 {
-    int i, j, pos[N], code[N];
-    char perm[N+1];
-    long long int fac[N], num = 0;
-    scanf("%s", perm);
+    int i;
     fac[0] = 1;
     for (i = 1; i < N; ++i) {
         fac[i] = (long long int)i * fac[i-1];
     }
+}
+
+void permutation_to_lehmer_code(char *perm, int *code)
+{
+    int i, j, pos[N];
     for (i = 0; i < N; ++i) {
         pos[i] = i;
     }
@@ -47,9 +50,26 @@ int main(void)
             pos[j]--;
         }
     }
+}
+
+long long int lehmer_code_to_integer(int *code, long long int *fac)
+{
+    int i;
+    long long int num = 0;
     for (i = 1; i < N; ++i) {
         num += code[N-1-i] * fac[i];
     }
-    printf("%lld\n", num);
+    return num;
+}
+
+int main(void)
+{
+    int i, j, pos[N], code[N];
+    char perm[N+1];
+    long long int fac[N];
+    scanf("%s", perm);
+    gen_factorial(fac);
+    permutation_to_lehmer_code(perm, code);
+    printf("%lld\n", lehmer_code_to_integer(code, fac));
     return 0;
 }
