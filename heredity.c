@@ -3,17 +3,17 @@
 #include <stdlib.h>
 #include <time.h>
 #define GENERATION 10           // 遗传代数
-#define P_crossoverOVER 0.8         // 交叉概率，一般为0.6~1.0
+#define P_CROSSOVER 0.8         // 交叉概率，一般为0.6~1.0
 #define P_MUTATION 0.008        // 变异概率，一般为0.005~0.01
 
-typedef struct Individual {
-    int chromosome;
+typedef struct s_individual {
+    unsigned int chromosome;
     double degree;
-}Indi;
+}Individual;
 
-double fitness(int individual)
+double fitness(unsigned int chromosome)
 {
-    return (double)individual * individual;
+    return (double)chromosome * chromosome;
 }
 
 int happened(double probability)
@@ -21,15 +21,15 @@ int happened(double probability)
     return (double)rand()/RAND_MAX < probability;
 }
 
-void init(int length, Indi *population, int size)
+void init(int length, Individual *population, int size)
 {
     int i, limit = 1 << length;
     for (i = 0; i < size; ++i) {
-        population[i].chromosome = rand() % 32;
+        population[i].chromosome = rand() % limit;
     }
 }
 
-void selection(Indi *population, int size, int *gene)
+void selection(Individual *population, int size, unsigned int *gene)
 {
     int i, j;
     double p, tmp, sum;
@@ -55,7 +55,7 @@ unsigned int get_bits(unsigned int num, int begin, int bits)
         mask <<= 1;
         mask |= 1;
     }
-    return ((unsigned int)num >> begin) & mask;
+    return (num >> begin) & mask;
 }
 
 void swap(int *a, int *b)
@@ -65,20 +65,26 @@ void swap(int *a, int *b)
     *b = tmp;
 }
 
-int crossover(int length, Indi *population, int size, int *gene)
+int crossover(int length, Individual *population, int size, unsigned int *gene)
 {
-    int i, crossover_point1, crossover_point2, father, mother;
+    int i, j, k, choice, crossover_point1, crossover_point2, *crossover_point;
+    unsigned int father, mother;
     for (i = 0; i < size; ++i) {
-        if (happened(P_crossoverOVER)) {
-            crossover_point1 = rand() % length;
-            // one point crossoverover
-            if (rand() % 2 == 1) {
+        if (happened(P_CROSSOVER)) {
+            population[i].chromosome = 0;
+            choice = rand() % 3;
+            // one-point crossoverover
+            if (choice == 0) {
+                // 长度为length的染色体最多有length-1个隔点
+                crossover_point1 = rand() % (length-1) + 1;
                 father = get_bits(gene[i*2], 0, crossover_point1);
                 mother = get_bits(gene[i*2+1], crossover_point1, length - crossover_point1);
                 population[i].chromosome = father | (mother << crossover_point1);
-            // two points crossoverover
-            } else {
-                while ((crossover_point2 = rand() % length) == crossover_point1) {
+            // two-point crossoverover
+            } else if (choice == 1) {
+                // 长度为length的染色体最多有length-1个隔点
+                crossover_point1 = rand() % (length-1) + 1;
+                while ((crossover_point2 = rand() % (length-1) + 1) == crossover_point1) {
                     continue;
                 }
                 if (crossover_point1 > crossover_point2) {
@@ -86,16 +92,44 @@ int crossover(int length, Indi *population, int size, int *gene)
                 }
                 father = get_bits(gene[i*2], 0, crossover_point1);
                 population[i].chromosome = father;
-                father = get_bits(gene[i*2], crossover_point2, length - crossover_point2);
-                population[i].chromosome |= father << crossover_point2;
                 mother = get_bits(gene[i*2+1], crossover_point1, crossover_point2 - crossover_point1);
                 population[i].chromosome |= mother << crossover_point1;
+                father = get_bits(gene[i*2], crossover_point2, length - crossover_point2);
+                population[i].chromosome |= father << crossover_point2;
+            // multipoint crossover
+            } else {
+                crossover_point = (int *)malloc((length+1) * sizeof(int));
+                for (j = 1; j <= length-1; ++j) {
+                    crossover_point[j] = 0;
+                }
+                // 长度为length的染色体最多有length-1个隔点
+                for (j = 0; j < length-1; ++j) {
+                    crossover_point[rand() % (length-1) + 1]++;
+                }
+                k = 0;
+                crossover_point[k++] = 0;
+                for (j = 1; j <= length-1; ++j) {
+                    if (crossover_point[j] != 0) {
+                        crossover_point[k++] = j;
+                    }
+                }
+                crossover_point[k] = length;
+                for (j = 0; j < k; ++j) {
+                    if (j % 2 == 1) {
+                        father = get_bits(gene[i*2], crossover_point[j], crossover_point[j+1] - crossover_point[j]);
+                        population[i].chromosome |= father << crossover_point[j];
+                    } else {
+                        mother = get_bits(gene[i*2+1], crossover_point[j], crossover_point[j+1] - crossover_point[j]);
+                        population[i].chromosome |= mother << crossover_point[j];
+                    }
+                }
+                free(crossover_point);
             }
         }
     }
 }
 
-int mutation(int length, Indi *population, int size)
+int mutation(int length, Individual *population, int size)
 {
     int i;
     for (i = 0; i < size; ++i) {
@@ -105,7 +139,7 @@ int mutation(int length, Indi *population, int size)
     }
 }
 
-void print_best(Indi *population, int size)
+void print_best(Individual *population, int size)
 {
     int i, best = 0;
     double sum = population[0].degree;
@@ -118,7 +152,7 @@ void print_best(Indi *population, int size)
     printf("最优个体为%4d(%5lf)，平均适应度为%5.3lf。\n", population[best].chromosome, population[best].degree, sum/size);
 }
 
-void evaluate(Indi *population, int size)
+void evaluate(Individual *population, int size)
 {
     int i;
     for (i = 0; i < size; ++i) {
@@ -129,8 +163,8 @@ void evaluate(Indi *population, int size)
 void heredity(int length, int size)
 {
     int i;
-    int *parent = (int *)malloc(size * 2 * sizeof(int));
-    Indi *population = (Indi *)malloc(size * sizeof(Indi));
+    unsigned int *parent = (int *)malloc(size * 2 * sizeof(int));
+    Individual *population = (Individual *)malloc(size * sizeof(Individual));
     init(length, population, size);
     evaluate(population, size);
     for (i = 1; i <= GENERATION; ++i) {
@@ -149,9 +183,9 @@ int main(void)
 {
     int length, size;
     srand(time(NULL));
-    printf("请输入位串长度：");
+    printf("请输入位串长度（1 <= length <= 32）：");
     scanf("%d", &length);
-    printf("请输入种群规模：");
+    printf("请输入种群规模（size >= 1)：");
     scanf("%d", &size);
     heredity(length, size);
     return 0;
