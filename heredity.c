@@ -11,7 +11,7 @@ typedef struct Individual {
     double degree;
 }Indi;
 
-double fit(int individual)
+double fitness(int individual)
 {
     return (double)individual * individual;
 }
@@ -122,7 +122,7 @@ void evaluate(Indi *population, int size)
 {
     int i;
     for (i = 0; i < size; ++i) {
-        population[i].degree = fit(population[i].chromosome);
+        population[i].degree = fitness(population[i].chromosome);
     }
 }
 
