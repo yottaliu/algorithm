@@ -1,10 +1,10 @@
-// 遗传算法求函数f(x) = x^2在[0, 31]之间的最大值，染色体采用5位编码
+// 遗传算法求函数f(x) = x^2在[0, 2^length-1]之间的最大值，染色体采用length位编码
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#define GENERATION 10
-#define P_CROSS 0.9
-#define P_MUTATE 0.001
+#define GENERATION 10           // 遗传代数
+#define P_crossoverOVER 0.8         // 交叉概率，一般为0.6~1.0
+#define P_MUTATION 0.008        // 变异概率，一般为0.005~0.01
 
 typedef struct Individual {
     int chromosome;
@@ -21,31 +21,29 @@ int happened(double probability)
     return (double)rand()/RAND_MAX < probability;
 }
 
-void init(Indi *pop, int n)
+void init(int length, Indi *population, int size)
 {
-    int i, tmp;
-    for (i = 0; i < n; ++i) {
-        tmp = rand() % 32;
-        pop[i].chromosome = tmp;
-        pop[i].degree = fit(tmp);
+    int i, limit = 1 << length;
+    for (i = 0; i < size; ++i) {
+        population[i].chromosome = rand() % 32;
     }
 }
 
-void pick(Indi *pop, int n, int *gene)
+void selection(Indi *population, int size, int *gene)
 {
     int i, j;
     double p, tmp, sum;
     sum = 0;
-    for (i = 0; i < n; ++i) {
-        sum += pop[i].degree;
+    for (i = 0; i < size; ++i) {
+        sum += population[i].degree;
     }
-    for (i = 0; i < 2*n; ++i) {
+    for (i = 0; i < 2*size; ++i) {
         p = (double)rand() / RAND_MAX;
         tmp = 0;
-        for (j = 0; j < n && p > tmp/sum; ++j) {
-            tmp += pop[j].degree;
+        for (j = 0; j < size && p > tmp/sum; ++j) {
+            tmp += population[j].degree;
         }
-        gene[i] = pop[j-1].chromosome;
+        gene[i] = population[j-1].chromosome;
     }
 }
 
@@ -67,91 +65,94 @@ void swap(int *a, int *b)
     *b = tmp;
 }
 
-int cross(Indi *pop, int n, int *gene)
+int crossover(int length, Indi *population, int size, int *gene)
 {
-    int i, cross_point1, cross_point2, father, mother;
-    for (i = 0; i < n; ++i) {
-        if (happened(P_CROSS)) {
-            cross_point1 = rand() % 5;
-            // one point exchange
+    int i, crossover_point1, crossover_point2, father, mother;
+    for (i = 0; i < size; ++i) {
+        if (happened(P_crossoverOVER)) {
+            crossover_point1 = rand() % length;
+            // one point crossoverover
             if (rand() % 2 == 1) {
-                father = get_bits(gene[i*2], 0, cross_point1);
-                mother = get_bits(gene[i*2+1], cross_point1, 5 - cross_point1);
-                pop[i].chromosome = father | (mother << cross_point1);
-            // two points exchange
+                father = get_bits(gene[i*2], 0, crossover_point1);
+                mother = get_bits(gene[i*2+1], crossover_point1, length - crossover_point1);
+                population[i].chromosome = father | (mother << crossover_point1);
+            // two points crossoverover
             } else {
-                while ((cross_point2 = rand() % 5) == cross_point1) {
+                while ((crossover_point2 = rand() % length) == crossover_point1) {
                     continue;
                 }
-                if (cross_point1 > cross_point2) {
-                    swap(&cross_point1, &cross_point2);
+                if (crossover_point1 > crossover_point2) {
+                    swap(&crossover_point1, &crossover_point2);
                 }
-                father = get_bits(gene[i*2], 0, cross_point1);
-                pop[i].chromosome = father;
-                father = get_bits(gene[i*2], cross_point2, 5 - cross_point2);
-                pop[i].chromosome |= father << cross_point2;
-                mother = get_bits(gene[i*2+1], cross_point1, cross_point2 - cross_point1);
-                pop[i].chromosome |= mother << cross_point1;
+                father = get_bits(gene[i*2], 0, crossover_point1);
+                population[i].chromosome = father;
+                father = get_bits(gene[i*2], crossover_point2, length - crossover_point2);
+                population[i].chromosome |= father << crossover_point2;
+                mother = get_bits(gene[i*2+1], crossover_point1, crossover_point2 - crossover_point1);
+                population[i].chromosome |= mother << crossover_point1;
             }
         }
     }
 }
 
-int mutate(Indi *pop, int n)
+int mutation(int length, Indi *population, int size)
 {
     int i;
-    for (i = 0; i < n; ++i) {
-        if (happened(P_MUTATE)) {
-            pop[i].chromosome ^= 1 << rand() % 5;
+    for (i = 0; i < size; ++i) {
+        if (happened(P_MUTATION)) {
+            population[i].chromosome ^= 1 << rand() % length;
         }
     }
 }
 
-void print_best(Indi *pop, int n)
+void print_best(Indi *population, int size)
 {
     int i, best = 0;
-    double sum = pop[0].degree;
-    for (i = 1; i < n; ++i) {
-        sum += pop[i].degree;
-        if (pop[i].degree > pop[best].degree) {
+    double sum = population[0].degree;
+    for (i = 1; i < size; ++i) {
+        sum += population[i].degree;
+        if (population[i].degree > population[best].degree) {
             best = i;
         }
     }
-    printf("最优个体为%4d(%5lf)，平均适应度为%5.3lf。\n", pop[best].chromosome, pop[best].degree, sum/n);
+    printf("最优个体为%4d(%5lf)，平均适应度为%5.3lf。\n", population[best].chromosome, population[best].degree, sum/size);
 }
 
-void evaluate(Indi *pop, int n)
+void evaluate(Indi *population, int size)
 {
     int i;
-    for (i = 0; i < n; ++i) {
-        pop[i].degree = fit(pop[i].chromosome);
+    for (i = 0; i < size; ++i) {
+        population[i].degree = fit(population[i].chromosome);
     }
 }
 
-void heredity(int n)
+void heredity(int length, int size)
 {
     int i;
-    int *parent = (int *)malloc(n * 2 * sizeof(int));
-    Indi *pop = (Indi *)malloc(n * sizeof(Indi));
-    init(pop, n);
+    int *parent = (int *)malloc(size * 2 * sizeof(int));
+    Indi *population = (Indi *)malloc(size * sizeof(Indi));
+    init(length, population, size);
+    evaluate(population, size);
     for (i = 1; i <= GENERATION; ++i) {
-        pick(pop, n, parent);
-        cross(pop, n, parent);
-        mutate(pop, n);
-        evaluate(pop, n);
+        selection(population, size, parent);
+        crossover(length, population, size, parent);
+        mutation(length, population, size);
+        evaluate(population, size);
         printf("第%2d代中", i);
-        print_best(pop, n);
+        print_best(population, size);
     }
     free(parent);
-    free(pop);
+    free(population);
 }
 
 int main(void)
 {
-    int n;
+    int length, size;
     srand(time(NULL));
+    printf("请输入位串长度：");
+    scanf("%d", &length);
     printf("请输入种群规模：");
-    scanf("%d", &n);
-    heredity(n);
+    scanf("%d", &size);
+    heredity(length, size);
     return 0;
 }
