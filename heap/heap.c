@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include "heap.h"
 
-typedef int ElementType;
-
 PriorityQueue init(int max_elements)
 {
     PriorityQueue h;
