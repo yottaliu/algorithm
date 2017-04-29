@@ -62,12 +62,26 @@ static void percolate_down(int i, ElementType *arr, int n)
     arr[i] = tmp;
 }
 
-void build_heap(ElementType *arr, int n)
+PriorityQueue arr2heap(ElementType *arr, int n)
 {
     int i;
+    PriorityQueue h;
+
+    h = (PriorityQueue)malloc(sizeof(Heap));
+    if (h == NULL) {
+        return NULL;
+    }
+
     for(i = n/2; i >= 0; --i) {
         percolate_down(i, arr, n);
     }
+
+    h->elements = arr;
+
+    h->capacity = n;
+    h->size = n;
+
+    return h;
 }
 
 ElementType delete_min(PriorityQueue h)

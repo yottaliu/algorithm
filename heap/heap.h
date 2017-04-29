@@ -11,7 +11,7 @@ typedef struct s_heap {
 typedef Heap *PriorityQueue;
 
 PriorityQueue init(int max_elements);
-void build_heap(ElementType *arr, int n);
+PriorityQueue arr2heap(ElementType *arr, int n);
 void destroy(PriorityQueue h);
 void make_empty(PriorityQueue h);
 void insert(ElementType elem, PriorityQueue h);
