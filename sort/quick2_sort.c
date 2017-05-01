@@ -9,7 +9,7 @@ static void swap(Item * one, Item * two)
     *two = tmp;
 }
 
-Item median3(Item *arr, int left, int right)
+static Item median_of_three(Item *arr, int left, int right)
 {
     int center;
     center = (left + right) / 2;
@@ -27,14 +27,14 @@ Item median3(Item *arr, int left, int right)
     return arr[right-1];
 }
 
-#define cutoff (3)
-void qsort(Item *arr, int left, int right)
+#define cutoff (16)     // must >= 3, but better <= 20
+static void qsort(Item *arr, int left, int right)
 {
     int i, j;
     Item pivot;
 
     if (left + cutoff <= right) {
-        pivot = median3(arr, left, right);
+        pivot = median_of_three(arr, left, right);
         i = left;
         j = right - 1;
         while (1) {

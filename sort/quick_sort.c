@@ -1,12 +1,10 @@
 #include "quick_sort.h"
 
-void quicksort(Item *arr, int left, int right)
+static int partition(Item *arr, int left, int right)
 {
     int i, j;
     Item tmp, t;
-    if (left > right) {
-        return;
-    }
+
     i = left;
     j = right;
     tmp = arr[left];
@@ -25,12 +23,24 @@ void quicksort(Item *arr, int left, int right)
     }
     arr[left] = arr[i];
     arr[i] = tmp;
-    quicksort(arr, left, i-1);
-    quicksort(arr, i+1, right);
+
+    return i;
+}
+
+static void qsort(Item *arr, int left, int right)
+{
+    int pivot;
+    if (left > right) {
+        return;
+    }
+
+    pivot = partition(arr, left, right);
+    qsort(arr, left, pivot-1);
+    qsort(arr, pivot+1, right);
 }
 
 int quick_sort(Item *arr, int n)
 {
-	quicksort(arr, 0, n-1);
+	qsort(arr, 0, n-1);
     return 1;
 }
