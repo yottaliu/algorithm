@@ -1,18 +1,18 @@
 #include "heap_sort.h"
 
-static void swap(ElementType * one, ElementType * two)
+static void swap(Item * one, Item * two)
 {
-    ElementType tmp;
+    Item tmp;
     tmp = *one;
     *one = *two;
     *two = tmp;
 }
 
 #define left_child(i)  (2 * (i) + 1)
-void percolate_down(int i, ElementType *arr, int n)
+void percolate_down(int i, Item *arr, int n)
 {
     int child;
-    ElementType tmp;
+    Item tmp;
     for(tmp = arr[i]; left_child(i) < n; i = child) {
         child = left_child(i);
         if(child != n-1 && arr[child+1] > arr[child]) {
@@ -27,7 +27,7 @@ void percolate_down(int i, ElementType *arr, int n)
     arr[i] = tmp;
 }
 
-int heap_sort(ElementType arr[], int n)
+int heap_sort(Item arr[], int n)
 {
     int i;
     for(i = n/2; i >= 0; --i) {

@@ -1,10 +1,10 @@
 #include "bubble_sort.h"
 
-int bubble_sort(ElementType *arr, int n)
+int bubble_sort(Item *arr, int n)
 {
     int i, j;
     int flag = 1;
-    ElementType tmp;
+    Item tmp;
     for (i = 0; flag && i < n-1; ++i) {
         flag = 0;
         for (j = 1; j < n-i; ++j) {

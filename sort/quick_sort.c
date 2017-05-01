@@ -1,9 +1,9 @@
 #include "quick_sort.h"
 
-void quicksort(ElementType *arr, int left, int right)
+void quicksort(Item *arr, int left, int right)
 {
     int i, j;
-    ElementType tmp, t;
+    Item tmp, t;
     if (left > right) {
         return;
     }
@@ -29,7 +29,7 @@ void quicksort(ElementType *arr, int left, int right)
     quicksort(arr, i+1, right);
 }
 
-int quick_sort(ElementType *arr, int n)
+int quick_sort(Item *arr, int n)
 {
 	quicksort(arr, 0, n-1);
     return 1;

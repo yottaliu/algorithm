@@ -1,15 +1,15 @@
 #include "quick2_sort.h"
 #include "insertion_sort.h"
 
-static void swap(ElementType * one, ElementType * two)
+static void swap(Item * one, Item * two)
 {
-    ElementType tmp;
+    Item tmp;
     tmp = *one;
     *one = *two;
     *two = tmp;
 }
 
-ElementType median3(ElementType *arr, int left, int right)
+Item median3(Item *arr, int left, int right)
 {
     int center;
     center = (left + right) / 2;
@@ -28,10 +28,10 @@ ElementType median3(ElementType *arr, int left, int right)
 }
 
 #define cutoff (3)
-void qsort(ElementType *arr, int left, int right)
+void qsort(Item *arr, int left, int right)
 {
     int i, j;
-    ElementType pivot;
+    Item pivot;
 
     if (left + cutoff <= right) {
         pivot = median3(arr, left, right);
@@ -59,7 +59,7 @@ void qsort(ElementType *arr, int left, int right)
     }
 }
 
-int quick2_sort(ElementType *arr, int n)
+int quick2_sort(Item *arr, int n)
 {
     qsort(arr, 0, n-1);
     return 1;

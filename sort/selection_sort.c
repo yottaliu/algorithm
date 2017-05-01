@@ -1,9 +1,9 @@
 #include "selection_sort.h"
 
-int selection_sort(ElementType *arr, int n)
+int selection_sort(Item *arr, int n)
 {
     int i, j, min;
-    ElementType tmp;
+    Item tmp;
     for (i = 0; i < n-1; ++i) {
         min = i;
         for (j = i+1; j < n; ++j) {

@@ -1,9 +1,9 @@
 #include "binary_insertion_sort.h"
 
-int binary_insertion_sort(ElementType *arr, int n)
+int binary_insertion_sort(Item *arr, int n)
 {
     int i, j, low, high, center;
-    ElementType tmp;
+    Item tmp;
     for (i = 1; i < n; ++i) {
         low = 0;
         high = i - 1;

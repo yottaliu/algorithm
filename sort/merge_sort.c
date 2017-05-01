@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "merge_sort.h"
 
-void merge(ElementType *arr, int left, int center, int right, ElementType *tmp_arr)
+void merge(Item *arr, int left, int center, int right, Item *tmp_arr)
 {
     int left_pos = left;
     int left_end = center;
@@ -26,7 +26,7 @@ void merge(ElementType *arr, int left, int center, int right, ElementType *tmp_a
     }
 }
 
-void mergesort(ElementType *arr, int left, int right, ElementType *tmp_arr)
+void mergesort(Item *arr, int left, int right, Item *tmp_arr)
 {
     int center;
     if (left < right) {
@@ -37,9 +37,9 @@ void mergesort(ElementType *arr, int left, int right, ElementType *tmp_arr)
     }
 }
 
-int merge_sort(ElementType *arr, int n)
+int merge_sort(Item *arr, int n)
 {
-    ElementType *tmp_arr = (ElementType *) malloc(n * sizeof(ElementType));
+    Item *tmp_arr = (Item *) malloc(n * sizeof(Item));
     if (tmp_arr == NULL) {
         return 0;
     }

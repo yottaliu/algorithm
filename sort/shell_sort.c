@@ -1,9 +1,9 @@
 #include "shell_sort.h"
 
-int shell_sort(ElementType *arr, int n)
+int shell_sort(Item *arr, int n)
 {
     int i, j, gap;
-    ElementType tmp;
+    Item tmp;
     for (gap = n/2; gap > 0; gap /= 2) {
         for (i = gap; i < n; ++i) {
             tmp = arr[i];
