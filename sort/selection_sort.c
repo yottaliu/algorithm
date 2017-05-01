@@ -1,6 +1,6 @@
 #include "selection_sort.h"
 
-int selection_sort(Item *arr, int n)
+void selection_sort(Item *arr, int n)
 {
     int i, j, min;
     Item tmp;
@@ -17,5 +17,4 @@ int selection_sort(Item *arr, int n)
             arr[min] = tmp;
         }
     }
-    return 1;
 }

@@ -1,12 +1,11 @@
 #include "quick2_sort.h"
 #include "insertion_sort.h"
 
-static void swap(Item * one, Item * two)
+static void swap(Item *a, Item *b)
 {
-    Item tmp;
-    tmp = *one;
-    *one = *two;
-    *two = tmp;
+    Item tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
 static Item median_of_three(Item *arr, int left, int right)
@@ -59,8 +58,7 @@ static void qsort(Item *arr, int left, int right)
     }
 }
 
-int quick2_sort(Item *arr, int n)
+void quick2_sort(Item *arr, int n)
 {
     qsort(arr, 0, n-1);
-    return 1;
 }

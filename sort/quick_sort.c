@@ -1,10 +1,10 @@
 #include "quick_sort.h"
 
-static void swap(Item * one, Item * two)
+static void swap(Item *a, Item *b)
 {
-    Item tmp = *one;
-    *one = *two;
-    *two = tmp;
+    Item tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
 static int partition(Item *arr, int left, int right)
@@ -43,8 +43,7 @@ static void qsort(Item *arr, int left, int right)
     qsort(arr, pivot_index+1, right);
 }
 
-int quick_sort(Item *arr, int n)
+void quick_sort(Item *arr, int n)
 {
 	qsort(arr, 0, n-1);
-    return 1;
 }

@@ -3,7 +3,7 @@
 #include <time.h>
 #include "sort.h"
 #define SIZE 100000
-typedef int (*ptr)(int *, int);
+typedef void (*ptr)(int *, int);
 typedef struct Func {
     ptr addr;
     char name[50];

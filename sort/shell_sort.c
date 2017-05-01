@@ -1,6 +1,6 @@
 #include "shell_sort.h"
 
-int shell_sort(Item *arr, int n)
+void shell_sort(Item *arr, int n)
 {
     int i, j, gap;
     Item tmp;
@@ -12,5 +12,4 @@ int shell_sort(Item *arr, int n)
             arr[j+gap] = tmp;
         }
     }
-    return 1;
 }

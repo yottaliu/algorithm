@@ -1,6 +1,6 @@
 #include "bubble_sort.h"
 
-int bubble_sort(Item *arr, int n)
+void bubble_sort(Item *arr, int n)
 {
     int i, j;
     int flag = 1;
@@ -16,5 +16,4 @@ int bubble_sort(Item *arr, int n)
             }
         }
     }
-    return 1;
 }

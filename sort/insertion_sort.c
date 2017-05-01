@@ -1,6 +1,6 @@
 #include "insertion_sort.h"
 
-int insertion_sort(Item *arr, int n)
+void insertion_sort(Item *arr, int n)
 {
     int i, j;
     Item tmp;
@@ -11,5 +11,4 @@ int insertion_sort(Item *arr, int n)
         }
         arr[j+1] = tmp;
     }
-    return 1;
 }

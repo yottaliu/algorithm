@@ -1,6 +1,6 @@
 #include "binary_insertion_sort.h"
 
-int binary_insertion_sort(Item *arr, int n)
+void binary_insertion_sort(Item *arr, int n)
 {
     int i, j, low, high, center;
     Item tmp;
@@ -21,5 +21,4 @@ int binary_insertion_sort(Item *arr, int n)
         }
         arr[low] = tmp;
     }
-    return 1;
 }
