@@ -33,14 +33,11 @@ static void qsort(Item *arr, int left, int right)
 {
     int pivot_pos;
 
-    if (left >= right) {
-        return;
+    if (left < right) {
+        pivot_pos = partition(arr, left, right);
+        qsort(arr, left, pivot_pos-1);
+        qsort(arr, pivot_pos+1, right);
     }
-
-    pivot_pos = partition(arr, left, right);
-
-    qsort(arr, left, pivot_pos-1);
-    qsort(arr, pivot_pos+1, right);
 }
 
 void quick_sort(Item *arr, int n)
