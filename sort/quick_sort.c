@@ -31,19 +31,19 @@ static int partition(Item *arr, int left, int right)
 
 static void qsort(Item *arr, int left, int right)
 {
-    int pivot_index;
+    int pivot_pos;
 
     if (left >= right) {
         return;
     }
 
-    pivot_index = partition(arr, left, right);
+    pivot_pos = partition(arr, left, right);
 
-    qsort(arr, left, pivot_index-1);
-    qsort(arr, pivot_index+1, right);
+    qsort(arr, left, pivot_pos-1);
+    qsort(arr, pivot_pos+1, right);
 }
 
 void quick_sort(Item *arr, int n)
 {
-	qsort(arr, 0, n-1);
+    qsort(arr, 0, n-1);
 }
