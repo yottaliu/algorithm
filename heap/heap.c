@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "heap.h"
 
-PriorityQueue init(int max_elements)
+PriorityQueue init(int max_items)
 {
     PriorityQueue h;
 
@@ -10,13 +10,13 @@ PriorityQueue init(int max_elements)
         return NULL;
     }
 
-    h->elements = (HeapItem *)malloc(max_elements * sizeof(HeapItem));
-    if (h->elements == NULL) {
+    h->items = (HeapItem *)malloc(max_items * sizeof(HeapItem));
+    if (h->items == NULL) {
         free(h);
         return NULL;
     }
 
-    h->capacity = max_elements;
+    h->capacity = max_items;
     h->size = 0;
 
     return h;
@@ -37,10 +37,10 @@ static void percolate_up(int i, HeapItem *arr)
     arr[i] = tmp;
 }
 
-void insert(HeapItem elem, PriorityQueue h)
+void insert(HeapItem item, PriorityQueue h)
 {
-    h->elements[h->size++] = elem;
-    percolate_up(h->size - 1, h->elements);
+    h->items[h->size++] = item;
+    percolate_up(h->size - 1, h->items);
 }
 
 #define left_child(i)  (2 * (i) + 1)
@@ -76,7 +76,7 @@ PriorityQueue arr2heap(HeapItem *arr, int n)
         percolate_down(i, arr, n);
     }
 
-    h->elements = arr;
+    h->items = arr;
 
     h->capacity = n;
     h->size = n;
@@ -88,16 +88,16 @@ HeapItem delete_min(PriorityQueue h)
 {
     HeapItem min;
 
-    min = h->elements[0];
-    h->elements[0] = h->elements[h->size--];
-    percolate_down(0, h->elements, h->size);
+    min = h->items[0];
+    h->items[0] = h->items[h->size--];
+    percolate_down(0, h->items, h->size);
 
     return min;
 }
 
 HeapItem find_min(PriorityQueue h)
 {
-    return h->elements[0];
+    return h->items[0];
 }
 
 int is_empty(PriorityQueue h)
@@ -112,6 +112,6 @@ int is_full(PriorityQueue h)
 
 void destroy(PriorityQueue h)
 {
-    free(h->elements);
+    free(h->items);
     free(h);
 }

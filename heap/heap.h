@@ -6,15 +6,15 @@ typedef int HeapItem;
 typedef struct s_heap {
     int capacity;
     int size;
-    HeapItem *elements;
+    HeapItem *items;
 }Heap;
 typedef Heap *PriorityQueue;
 
-PriorityQueue init(int max_elements);
+PriorityQueue init(int max_items);
 PriorityQueue arr2heap(HeapItem *arr, int n);
 void destroy(PriorityQueue h);
 void make_empty(PriorityQueue h);
-void insert(HeapItem elem, PriorityQueue h);
+void insert(HeapItem item, PriorityQueue h);
 HeapItem delete_min(PriorityQueue h);
 HeapItem find_min(PriorityQueue h);
 int is_empty(PriorityQueue h);
